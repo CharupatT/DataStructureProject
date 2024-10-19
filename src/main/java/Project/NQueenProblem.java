@@ -38,7 +38,7 @@ public class NQueenProblem {
             for (int col = 0; col < n; col++) {
                 int diag1 = row - col + n - 1;
                 int diag2 = row + col;
-//graceis handsome
+
                 // Check if it's safe to place a queen
                 if (!cols[col] && !diags1[diag1] && !diags2[diag2]) {
                     // Place the queen
