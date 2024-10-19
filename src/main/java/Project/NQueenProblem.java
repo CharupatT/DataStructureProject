@@ -157,6 +157,11 @@ public class NQueenProblem {
             if (solutions.isEmpty()) {
                 System.out.println("No solutions found.");
             } else {
+                // Add this line here
+                System.out.println("Number of solutions found: " + solutions.size());
+                System.out.println("=============================");
+
+                // Print the solutions
                 for (List<List<String>> solution : solutions) {
                     for (List<String> row : solution) {
                         System.out.println(String.join(" ", row));
