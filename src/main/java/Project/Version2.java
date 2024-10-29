@@ -6,10 +6,7 @@ package Project;
  may adjust user interface and oop nakaa
 */
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 class Board {
     private int size;
@@ -76,13 +73,25 @@ class QueenPlacement {
         return true;
     }
 
-    public void solveNQueens(int k, int firstQueenRow, int firstQueenCol, boolean isManual) {
+    public void solveNQueens(int firstQueenRow, int firstQueenCol, boolean isManual) {
         int n = board.getSize();
-        for (int i = 0; i < n; i++) {
-            if (place(k, i)) {
-                board.setQueen(k, i);  // Place the queen at (k, i)
-                if (k == n - 1) {
-                    // If all queens are placed, check if it matches the user's first queen position
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[] {0, -1}); // Start at row 0, column -1 (not placed)
+
+        while (!stack.isEmpty()) {
+            int[] position = stack.pop();
+            int row = position[0];
+            int col = position[1] + 1;
+
+            while (col < n && !place(row, col)) {
+                col++;
+            }
+
+            if (col < n) {
+                board.setQueen(row, col);
+                stack.push(new int[] {row, col}); // Save this placement
+
+                if (row == n - 1) { // Last row
                     if (!isManual || board.getQueenPositions().get(firstQueenRow) == firstQueenCol) {
                         foundMatch = true;
                         solutionCount++;
@@ -91,9 +100,10 @@ class QueenPlacement {
                         board.display();  // Display the board with row labels
                     }
                 } else {
-                    solveNQueens(k + 1, firstQueenRow, firstQueenCol, isManual);
+                    stack.push(new int[] {row + 1, -1}); // Move to the next row
                 }
-                board.setQueen(k, -1);  // Backtrack
+            } else {
+                board.setQueen(row, -1); // Backtrack
             }
         }
     }
@@ -133,7 +143,7 @@ class NQueensSolver {
                 }
 
                 // Find solutions
-                queenPlacement.solveNQueens(0, firstQueenRow, firstQueenCol, isManual);
+                queenPlacement.solveNQueens(firstQueenRow, firstQueenCol, isManual);
 
                 // If no matching solution was found, inform the user
                 if (isManual && !queenPlacement.isFoundMatch()) {
@@ -202,4 +212,5 @@ public class Version2 {
         solver.start();
     }
 }
+
 
